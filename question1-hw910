@@ -1,0 +1,84 @@
+from scipy import optimize
+import numpy as np
+import matplotlib.pyplot as plt
+% matplotlib inline
+
+k = 8.99*10**9
+q = 1.0*10**(-6)
+
+def E_pointsource(Q,xtest,xsource):
+    d = xtest - xsource
+    return k*Q/d**2
+    
+q1 = 2*q
+x1 = 2/100 #cm to m
+
+q2 = q
+x2 = 1/100
+
+q3 = 3*q
+x3 = 3/100
+
+q4 = q
+x4 = 9/100
+
+###############
+
+def Etot12(x):
+    # Total electric field between q1 and q2, 0 < x < 3
+    return E_pointsource(q1,x,x1)+E_pointsource(q2,x,x2)-E_pointsource(q3,x,x3)-E_pointsource(q4,x,x4)
+
+zeros12 = optimize.fsolve(Etot12,0.03)
+print(zeros12)
+Etot12(zeros12[0])
+
+x=np.linspace(0,3,200)
+zero=np.zeros(200)
+plt.plot(x,Etot12(x/100))
+plt.plot(x,zero)
+plt.xlabel('x [cm]')
+plt.ylabel('Electric Field')
+plt.axis([0,3,max(Etot12(x/100))*5,10**8])
+plt.show()
+
+###############
+
+def Etot23(x):
+    # Total electric field between q2 and q3, 3 < x < 5
+    return E_pointsource(q1,x,x1)+E_pointsource(q2,x,x2)-E_pointsource(q3,x,x3)-E_pointsource(q4,x,x4)
+
+zeros23 = optimize.fsolve(Etot23,0.02)
+print(zeros23)
+Etot23(zeros23[0])
+
+x=np.linspace(3,5,200)
+zero=np.zeros(200)
+plt.plot(x,Etot23(x/100))
+plt.plot(x,zero)
+plt.xlabel('x [cm]')
+plt.ylabel('Electric Field')
+plt.axis([3,5,max(Etot23(x/100))*5,10**8])
+plt.show()
+
+###############
+
+def Etot34(x):
+    # Total electric field between q3 and q4, 5 < x < 11
+    return E_pointsource(q1,x,x1)+E_pointsource(q2,x,x2)-E_pointsource(q3,x,x3)-E_pointsource(q4,x,x4)
+
+zeros34 = optimize.fsolve(Etot34,0.06)
+print(zeros34)
+Etot34(zeros34[0])
+
+x=np.linspace(5,11,200)
+zero=np.zeros(200)
+plt.plot(x,Etot34(x/100))
+plt.plot(x,zero)
+plt.xlabel('x [cm]')
+plt.ylabel('Electric Field')
+plt.axis([5,11,max(Etot34(x/100))*5,10**8])
+plt.show()
+
+###############
+
+ 
